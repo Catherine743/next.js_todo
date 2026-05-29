@@ -26,13 +26,13 @@ export default function Home() {
     <div className="flex flex-col items-center justify-center min-h-screen py-2">
       <div className="bg-gray-300 block max-w-sm m-5 p-6 border border-default rounded-base shadow-xs hover:bg-neutral-secondary-medium">
         <h1 className="text-3xl text-blue-600 text-center mb-3 tracking-tight text-heading">Create a Note</h1>
-        <form action="">
+        <div className="p-5 shadow w-full">
           <input value={noteData.title} onChange={(e) => setNoteData({ ...noteData, title: e.target.value })} type="text" placeholder="Enter your note..." className="p-2 mb-3 border border-gray-200 w-full text-white bg-gray-800 placeholder:text-gray-500" />
           <textarea value={noteData.description} onChange={(e) => setNoteData({ ...noteData, description: e.target.value })} placeholder="Enter your note..." className="p-2 mb-3 border border-gray-200 w-full text-white bg-gray-800 placeholder:text-gray-500"></textarea>
           <div className="grid">
             <button className="bg-green-500 p-2 text-white" onClick={handleAddNote}>Submit</button>
           </div>
-        </form>
+        </div>
       </div>
 
       {/* display area */}
