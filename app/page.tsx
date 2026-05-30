@@ -8,6 +8,7 @@ export default function Home() {
   });
 
   const [allNotes, setAllNotes] = useState([]);
+  const [editId, setEditId] = useState(null)
 
   useEffect(() => {
     getNotes()
@@ -26,6 +27,7 @@ export default function Home() {
         body: JSON.stringify(noteData)
       })
       console.log(response)
+      getNotes()
     }
   }
 
@@ -43,6 +45,18 @@ export default function Home() {
       getNotes()
     }
   }
+
+  const handleEdit = async () => {
+    let response = await fetch(`/api/notes/${editId}`, {
+      method: "PUT",
+      body: JSON.stringify(noteData)
+    })
+    if (response.status == 200) {
+      alert("Updated successfully")
+      getNotes()
+      setNoteData({ title: "", description: "" })
+    }
+  }
   // console.log(allNotes)
 
 
@@ -54,7 +68,10 @@ export default function Home() {
           <input value={noteData.title} onChange={(e) => setNoteData({ ...noteData, title: e.target.value })} type="text" placeholder="Enter your note..." className="p-2 mb-3 border border-gray-200 w-full text-white bg-gray-800 placeholder:text-gray-500" />
           <textarea value={noteData.description} onChange={(e) => setNoteData({ ...noteData, description: e.target.value })} placeholder="Enter your note..." className="p-2 mb-3 border border-gray-200 w-full text-white bg-gray-800 placeholder:text-gray-500"></textarea>
           <div className="grid">
-            <button className="bg-green-500 p-2 text-white" onClick={handleAddNote}>Submit</button>
+            {editId ?
+              <button className="bg-green-500 p-2 text-white" onClick={handleEdit}>Update</button> :
+              <button className="bg-green-500 p-2 text-white" onClick={handleAddNote}>Submit</button>
+            }
           </div>
         </div>
       </div>
@@ -65,7 +82,7 @@ export default function Home() {
           <h2 className="text-2xl text-blue-600 mb-3 tracking-tight text-heading leading-8">{notes.title}</h2>
           <p className="text-body text-black">{notes.description}</p>
           <div className="flex gap-2">
-            <button className="bg-blue-500 p-2 text-white">Edit</button>
+            <button className="bg-blue-500 p-2 text-white" onClick={() => { setNoteData(notes); setEditId(notes?._id)}}>Edit</button>
             <button className="bg-red-500 p-2 text-white" onClick={() => deleteNotes(notes?._id)}>Delete</button>
           </div>
         </div>
