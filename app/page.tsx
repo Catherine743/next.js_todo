@@ -55,6 +55,7 @@ export default function Home() {
       alert("Updated successfully")
       getNotes()
       setNoteData({ title: "", description: "" })
+      setEditId(null)
     }
   }
   // console.log(allNotes)
