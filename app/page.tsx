@@ -13,7 +13,7 @@ export default function Home() {
     getNotes()
   }, [])
 
-  const handleAddNote = () => {
+  const handleAddNote = async () => {
     const { title, description } = noteData
 
     if (!title || !description) {
@@ -21,7 +21,7 @@ export default function Home() {
     }
     else {
       // api call
-      const response = fetch("/api/notes", {
+      const response = await fetch("/api/notes", {
         method: "POST",
         body: JSON.stringify(noteData)
       })
@@ -33,7 +33,18 @@ export default function Home() {
     const response = await fetch("/api/notes")
     setAllNotes(await response.json())
   }
-  console.log(allNotes)
+
+  const deleteNotes = async (id: string) => {
+    const response = await fetch(`/api/notes/${id}`, {
+      method: "DELETE"
+    })
+    if (response.status == 200) {
+      alert("Deleted successfully")
+      getNotes()
+    }
+  }
+  // console.log(allNotes)
+
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen py-2">
@@ -50,12 +61,12 @@ export default function Home() {
 
       {/* display area */}
       {allNotes?.length > 0 ? allNotes.map((notes: any, index: number) => (
-        <div key={index} className="bg-gray-300 block max-w-sm m-5 p-6 border border-default rounded-base shadow-xs hover:bg-neutral-secondary-medium">
+        <div key={index} className="bg-gray-300 block max-w-sm m-5 p-6 border border-default rounded-base shadow-xs hover:bg-neutral-secondary-medium fixed w-full">
           <h2 className="text-2xl text-blue-600 mb-3 tracking-tight text-heading leading-8">{notes.title}</h2>
           <p className="text-body text-black">{notes.description}</p>
           <div className="flex gap-2">
             <button className="bg-blue-500 p-2 text-white">Edit</button>
-            <button className="bg-red-500 p-2 text-white">Delete</button>
+            <button className="bg-red-500 p-2 text-white" onClick={() => deleteNotes(notes?._id)}>Delete</button>
           </div>
         </div>
       )) : <p>Nothing to display</p>}
